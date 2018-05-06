@@ -155,7 +155,7 @@ struct fractal **getFractal(char *fileName)
 		}
 		else
 		{
-			// do nothing
+		;	// do nothing
 		}
 	}
 
@@ -202,4 +202,6 @@ int startWith(const char *start, const char *string)
     return strncmp(start, string, strlen(start)) == 0;
 }
 
-
+// Producers & consumers 
+// Threads 
+// 

@@ -1,0 +1,23 @@
+commit 4ae11bb8e7bbff788cb01da1fbf70a21859ff614
+Author: Simon Dujardin <simon.dujardin@student.uclouvain.be>
+Date:   Thu May 3 16:12:09 2018 +0200
+
+    new repo
+
+ Makefile                |  19 +++++
+ empty.bmp               | Bin 0 -> 1920054 bytes
+ enonce_fractales.pdf    | Bin 0 -> 240590 bytes
+ libfractal/Makefile     |  19 +++++
+ libfractal/fractal.c    |  79 +++++++++++++++++++
+ libfractal/fractal.h    | 118 ++++++++++++++++++++++++++++
+ libfractal/fractal.o    | Bin 0 -> 6768 bytes
+ libfractal/libfractal.a | Bin 0 -> 19034 bytes
+ libfractal/tools.c      | 107 +++++++++++++++++++++++++
+ libfractal/tools.o      | Bin 0 -> 11848 bytes
+ lol.bmp                 | Bin 0 -> 246 bytes
+ main                    | Bin 0 -> 27336 bytes
+ main.c                  | 205 ++++++++++++++++++++++++++++++++++++++++++++++++
+ main.o                  | Bin 0 -> 12640 bytes
+ new.bmp                 | Bin 0 -> 1920054 bytes
+ test.bmp                | Bin 0 -> 1920054 bytes
+ 16 files changed, 547 insertions(+)
