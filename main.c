@@ -20,6 +20,13 @@ int isD = 0;	// default value = false
 int maxThreads = 1;	// default value = 1 thread
 int numberFiles;
 int startFiles = 1; 
+//Threading 
+pthread_mutex_t mutexpc1;
+sem_t empty;
+sem_t full;
+int status = 1;
+//To do: create a structure to store all fractals -> Rotating buffer?
+
 
 int main(int argc, char *argv[])
 {
@@ -79,10 +86,18 @@ int main(int argc, char *argv[])
 		fileTab[index] = argv[j];
 		index++;
 	}
-	
+	// Initialising threads
+	pthread_mutex_init(&mutexpc1, NULL);
+	sem_init(&empty, 0, numberFiles);  
+	sem_init(&full, 0, 0);
+
 	best = getBestFractal(getFractal(fileTab[0]));
 	write_bitmap_sdl(best, outPutFile);	
-	
+	//Destroys & frees 
+	sem_destroy(empty);
+	sem_destroy(full);
+	pthread_mutex_destroy(&mutexpc1);
+
 }
 
 size_t countLines(char *fileName)
@@ -202,6 +217,16 @@ int startWith(const char *start, const char *string)
     return strncmp(start, string, strlen(start)) == 0;
 }
 
-// Producers & consumers 
+// Un thread prend les fractales du fichier et les mets dans un producteur conso
+// Producteur les prends et calcule 
+// 
+// Producers & consumers via un buffer protégé par mutex 
+// Taille: nombre de threads 
 // Threads 
 // 
+
+//Reader qui met dans le buffer les différentes fractales à calculer 
+void producer(char** filetable){
+;}
+void consumer() {;}
+
