@@ -1,0 +1,6 @@
+1) Que mettre dans le producteur ?
+- Les != fichiers, la structure du buffer avec un tracking de là où on en est 
+- Le faire remplir la structure tant qu'il y a des lignes à parcourir 
+
+2) Que mettre dans le consommateur? 
+- Le consommateur va prendre une équation et la calculer, puis la remettre dans le sbuf2 qui contient un tab de 

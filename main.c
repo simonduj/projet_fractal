@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "fractal.h"
+#include <fractal.h>
 #include <pthread.h>
 #include <semaphore.h>
 
@@ -26,18 +26,17 @@ int startFiles = 1;
 struct fractal **tab;
 //Threading 
 int status = 1;
-
+//structure to store buffers including the buffer with all the files and the buffer for the fractals 
 typedef struct {
-struct fractal** fractalbuf
-void** filebuf; 	
+struct fractal** fractalbuf //stores fractals 
+void** filebuf; //stores files  	
 sem_t* full; //full slots 
 sem_t* empty; //empty slots
 pthread_mutex_t mutexpc;
+int** fractresults;
 int idx; 
+int idxf;
 }buffr;
-
-
-	//To do: create a structure to store all fractals -> Rotating buffer?
 
 
 
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
 	//buf1 for 
 	buf1 = (buffr *) malloc(sizeof(buffr));
 	buf2 = (buffr *) malloc(sizeof(buffr));
-	
+	//todo? initialise data of structs?
 
 	//CHECK INPUT 
  
@@ -145,7 +144,7 @@ void* producethread(void* param){
 }
 
 void* consumethread(void* param){
-	//todo
+
 	return (void*);
 }
 
@@ -224,7 +223,7 @@ void producer(buffr * bfr, char *fileName){
 		//Add fractal to buffer
 			bfr->fractalbuf[bfr->idx] = (struct fractal *) fractal_new(name, width, height, a, b);
 		//Incrementing index with modulo to be sure to reset without overflowing
-			bfr->idx = ((bfx->idx)+1)%maxThreads; 
+			bfr->idx = ((bfr->idx)+1)%maxThreads; 
 		//Unlock buffer	
 			pthread_mutex_unlock(bfr->mutexpc1);
 			sem_post(bfr->full); //One more slot is full 
@@ -237,8 +236,19 @@ void producer(buffr * bfr, char *fileName){
 }
 
 
-void consumer() {
-//todo
+void consumer(buffr * bfr) {
+
+	//take as input the list of fractals
+	//compute fractals
+	//return fractals
+	sem_wait(&full); //Waiting for full slot
+	pthread_mutex_lock(bfr->mutexpc1);
+	// Critical Section 
+	bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+	bfr->idx = ((bfr->idx)+1)%maxThreads;//Incrementing buffer cursor
+	pthread_mutex_unlock(bfr->mutexpc1);
+	sem_post(&empty);//One more free slot
+
 ;}
 
 
