@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
     //////////////// MALLOC DU TAB DE POINTEUR /////////////////////////////////////////////
     number1->ptrTab = (uint8_t **) malloc(sizeof(uint8_t*)*nbrthreads);
     /////////////// MALLOC DU BUFFER CHAR //////////////////////////////////////////////////
-    number2->bufferChar = (char **)malloc(sizeof(char *)*nbrthreads);
+    number2->	bufferChar = (char **)malloc(sizeof(char *)*nbrthreads);
     /*int j;
     for( j = 0; j<nbrthreads;j++){
         number2->bufferChar[j] = (char *)malloc(sizeof(char)*17); // hash de 5 uint8_t

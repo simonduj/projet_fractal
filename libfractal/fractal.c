@@ -20,7 +20,7 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
 	int * tmp;
 	tmp = (int *)malloc(width*height*sizeof(int));
 	
-	if(frac->values == NULL)
+	if(frac->values == NULL)	
 	{
 		return NULL;
 	}

@@ -1,0 +1,692 @@
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main
+gcc -g -Wall -c main.c -Ilibfractal/ -I/etinfo/users/2017/ruwetp/local/include -I/etinfo/users/2017/ruwetp/usr/lib
+main.c:19:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void producer(struct buffr *, char *);
+                      ^
+main.c:19:22: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+main.c:20:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void consumer(struct buffr * );
+                      ^
+main.c: In function ‘producethread’:
+main.c:50:2: warning: passing argument 1 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void producer(struct buffr *, char *);
+      ^
+main.c:50:2: warning: passing argument 2 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘consumethread’:
+main.c:56:2: warning: passing argument 1 of ‘consumer’ from incompatible pointer type [enabled by default]
+  consumer(actual_param);
+  ^
+main.c:20:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘main’:
+main.c:124:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf1 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:125:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:129:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->empty, 0, numberFiles);  
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:130:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->full, 0, 0);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:131:23: error: expected expression before ‘int’
+  buf1->fractresults = int** malloc (sizeof(int)*numberFiles*150);
+                       ^
+main.c:168:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->empty);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:169:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->full);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:125:9: warning: unused variable ‘buf2’ [-Wunused-variable]
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+         ^
+main.c: At top level:
+main.c:206:6: error: conflicting types for ‘producer’
+ void producer(buffr* bfr, char *fileName){
+      ^
+main.c:19:6: note: previous declaration of ‘producer’ was here
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘producer’:
+main.c:208:58: error: ‘fractal’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                          ^
+main.c:208:58: note: each undeclared identifier is reported only once for each function it appears in
+main.c:208:67: error: ‘number’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                                   ^
+main.c:241:4: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+    pthread_mutex_lock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:248:4: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+    pthread_mutex_unlock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+main.c:208:19: warning: unused variable ‘tab’ [-Wunused-variable]
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                   ^
+main.c: At top level:
+main.c:259:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void consumer(struct buffr * bfr) {
+                      ^
+main.c:259:6: error: conflicting types for ‘consumer’
+ void consumer(struct buffr * bfr) {
+      ^
+main.c:20:6: note: previous declaration of ‘consumer’ was here
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘consumer’:
+main.c:264:14: error: dereferencing pointer to incomplete type
+  sem_wait(bfr->full); //Waiting for full slot
+              ^
+main.c:265:24: error: dereferencing pointer to incomplete type
+  pthread_mutex_lock(bfr->mutexpc);
+                        ^
+main.c:267:5: error: dereferencing pointer to incomplete type
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+     ^
+main.c:267:23: error: dereferencing pointer to incomplete type
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+                       ^
+main.c:267:54: error: dereferencing pointer to incomplete type
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+                                                      ^
+main.c:267:70: error: dereferencing pointer to incomplete type
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+                                                                      ^
+main.c:267:2: error: too few arguments to function ‘fractal_get_value’
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+  ^
+In file included from main.c:5:0:
+libfractal/fractal.h:49:5: note: declared here
+ int fractal_get_value(const struct fractal *f, int x, int y);
+     ^
+main.c:268:5: error: dereferencing pointer to incomplete type
+  bfr->idxf= bfr->idxf+1;
+     ^
+main.c:268:16: error: dereferencing pointer to incomplete type
+  bfr->idxf= bfr->idxf+1;
+                ^
+main.c:269:5: error: dereferencing pointer to incomplete type
+  bfr->idx = ((bfr->idx)+1)%maxThreads;//Incrementing buffer cursor
+     ^
+main.c:269:18: error: dereferencing pointer to incomplete type
+  bfr->idx = ((bfr->idx)+1)%maxThreads;//Incrementing buffer cursor
+                  ^
+main.c:270:26: error: dereferencing pointer to incomplete type
+  pthread_mutex_unlock(bfr->mutexpc);
+                          ^
+main.c:271:14: error: dereferencing pointer to incomplete type
+  sem_post(bfr->empty);//One more free slot
+              ^
+make: *** [main] Error 1
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ 
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main
+gcc -g -Wall -c main.c -Ilibfractal/ -I/etinfo/users/2017/ruwetp/local/include -I/etinfo/users/2017/ruwetp/usr/lib
+main.c:19:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void producer(struct buffr *, char *);
+                      ^
+main.c:19:22: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+main.c:20:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void consumer(struct buffr * );
+                      ^
+main.c: In function ‘producethread’:
+main.c:50:2: warning: passing argument 1 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void producer(struct buffr *, char *);
+      ^
+main.c:50:2: warning: passing argument 2 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘consumethread’:
+main.c:56:2: warning: passing argument 1 of ‘consumer’ from incompatible pointer type [enabled by default]
+  consumer(actual_param);
+  ^
+main.c:20:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘main’:
+main.c:124:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf1 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:125:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:129:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->empty, 0, numberFiles);  
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:130:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->full, 0, 0);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:131:23: error: expected expression before ‘int’
+  buf1->fractresults = int** malloc (sizeof(int)*numberFiles*150);
+                       ^
+main.c:168:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->empty);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:169:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->full);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:125:9: warning: unused variable ‘buf2’ [-Wunused-variable]
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+         ^
+main.c: At top level:
+main.c:206:6: error: conflicting types for ‘producer’
+ void producer(buffr* bfr, char *fileName){
+      ^
+main.c:19:6: note: previous declaration of ‘producer’ was here
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘producer’:
+main.c:208:58: error: ‘fractal’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                          ^
+main.c:208:58: note: each undeclared identifier is reported only once for each function it appears in
+main.c:208:67: error: ‘number’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                                   ^
+main.c:241:4: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+    pthread_mutex_lock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:248:4: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+    pthread_mutex_unlock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+main.c:208:19: warning: unused variable ‘tab’ [-Wunused-variable]
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                   ^
+main.c: At top level:
+main.c:259:6: error: conflicting types for ‘consumer’
+ void consumer(buffr * bfr) {
+      ^
+main.c:20:6: note: previous declaration of ‘consumer’ was here
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘consumer’:
+main.c:265:2: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+  pthread_mutex_lock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:267:2: error: too few arguments to function ‘fractal_get_value’
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+  ^
+In file included from main.c:5:0:
+libfractal/fractal.h:49:5: note: declared here
+ int fractal_get_value(const struct fractal *f, int x, int y);
+     ^
+main.c:270:2: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+  pthread_mutex_unlock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+make: *** [main] Error 1
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ 
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main
+gcc -g -Wall -c main.c -Ilibfractal/ -I/etinfo/users/2017/ruwetp/local/include -I/etinfo/users/2017/ruwetp/usr/lib
+main.c:19:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void producer(struct buffr *, char *);
+                      ^
+main.c:19:22: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+main.c:20:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void consumer(struct buffr * );
+                      ^
+main.c: In function ‘producethread’:
+main.c:50:2: warning: passing argument 1 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void producer(struct buffr *, char *);
+      ^
+main.c:50:2: warning: passing argument 2 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘consumethread’:
+main.c:56:2: warning: passing argument 1 of ‘consumer’ from incompatible pointer type [enabled by default]
+  consumer(actual_param);
+  ^
+main.c:20:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘main’:
+main.c:124:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf1 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:125:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:129:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->empty, 0, numberFiles);  
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:130:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->full, 0, 0);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:131:23: error: expected expression before ‘int’
+  buf1->fractresults = int** malloc (sizeof(int)*numberFiles*150);
+                       ^
+main.c:168:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->empty);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:169:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->full);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:125:9: warning: unused variable ‘buf2’ [-Wunused-variable]
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+         ^
+main.c: At top level:
+main.c:206:6: error: conflicting types for ‘producer’
+ void producer(buffr* bfr, char *fileName){
+      ^
+main.c:19:6: note: previous declaration of ‘producer’ was here
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘producer’:
+main.c:208:58: error: ‘fractal’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                          ^
+main.c:208:58: note: each undeclared identifier is reported only once for each function it appears in
+main.c:208:67: error: ‘number’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                                   ^
+main.c:241:4: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+    pthread_mutex_lock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:248:4: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+    pthread_mutex_unlock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+main.c:208:19: warning: unused variable ‘tab’ [-Wunused-variable]
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                   ^
+main.c: At top level:
+main.c:259:6: error: conflicting types for ‘consumer’
+ void consumer(buffr * bfr) {
+      ^
+main.c:20:6: note: previous declaration of ‘consumer’ was here
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘consumer’:
+main.c:265:2: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+  pthread_mutex_lock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:267:2: error: too few arguments to function ‘fractal_get_value’
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+  ^
+In file included from main.c:5:0:
+libfractal/fractal.h:49:5: note: declared here
+ int fractal_get_value(const struct fractal *f, int x, int y);
+     ^
+main.c:270:2: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+  pthread_mutex_unlock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+make: *** [main] Error 1
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ 
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main>outingyoubitch.txt
+main.c:19:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void producer(struct buffr *, char *);
+                      ^
+main.c:19:22: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+main.c:20:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void consumer(struct buffr * );
+                      ^
+main.c: In function ‘producethread’:
+main.c:50:2: warning: passing argument 1 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void producer(struct buffr *, char *);
+      ^
+main.c:50:2: warning: passing argument 2 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘consumethread’:
+main.c:56:2: warning: passing argument 1 of ‘consumer’ from incompatible pointer type [enabled by default]
+  consumer(actual_param);
+  ^
+main.c:20:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘main’:
+main.c:124:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf1 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:125:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:129:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->empty, 0, numberFiles);  
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:130:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->full, 0, 0);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:131:23: error: expected expression before ‘int’
+  buf1->fractresults = int** malloc (sizeof(int)*numberFiles*150);
+                       ^
+main.c:168:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->empty);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:169:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->full);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:125:9: warning: unused variable ‘buf2’ [-Wunused-variable]
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+         ^
+main.c: At top level:
+main.c:206:6: error: conflicting types for ‘producer’
+ void producer(buffr* bfr, char *fileName){
+      ^
+main.c:19:6: note: previous declaration of ‘producer’ was here
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘producer’:
+main.c:208:58: error: ‘fractal’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                          ^
+main.c:208:58: note: each undeclared identifier is reported only once for each function it appears in
+main.c:208:67: error: ‘number’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                                   ^
+main.c:241:4: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+    pthread_mutex_lock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:248:4: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+    pthread_mutex_unlock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+main.c:208:19: warning: unused variable ‘tab’ [-Wunused-variable]
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                   ^
+main.c: At top level:
+main.c:259:6: error: conflicting types for ‘consumer’
+ void consumer(buffr * bfr) {
+      ^
+main.c:20:6: note: previous declaration of ‘consumer’ was here
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘consumer’:
+main.c:265:2: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+  pthread_mutex_lock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:267:2: error: too few arguments to function ‘fractal_get_value’
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+  ^
+In file included from main.c:5:0:
+libfractal/fractal.h:49:5: note: declared here
+ int fractal_get_value(const struct fractal *f, int x, int y);
+     ^
+main.c:270:2: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+  pthread_mutex_unlock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+make: *** [main] Error 1
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ 
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main| >outingyoubitch.txt
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main| >outingyoubitch.txt
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ make main
+gcc -g -Wall -c main.c -Ilibfractal/ -I/etinfo/users/2017/ruwetp/local/include -I/etinfo/users/2017/ruwetp/usr/lib
+main.c:19:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void producer(struct buffr *, char *);
+                      ^
+main.c:19:22: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+main.c:20:22: warning: ‘struct buffr’ declared inside parameter list [enabled by default]
+ void consumer(struct buffr * );
+                      ^
+main.c: In function ‘producethread’:
+main.c:50:2: warning: passing argument 1 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void producer(struct buffr *, char *);
+      ^
+main.c:50:2: warning: passing argument 2 of ‘producer’ from incompatible pointer type [enabled by default]
+  producer(actual_param,fileTab);
+  ^
+main.c:19:6: note: expected ‘char *’ but argument is of type ‘char **’
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘consumethread’:
+main.c:56:2: warning: passing argument 1 of ‘consumer’ from incompatible pointer type [enabled by default]
+  consumer(actual_param);
+  ^
+main.c:20:6: note: expected ‘struct buffr *’ but argument is of type ‘struct buffr *’
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘main’:
+main.c:124:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf1 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:125:40: error: invalid application of ‘sizeof’ to incomplete type ‘struct buffr’
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+                                        ^
+main.c:129:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->empty, 0, numberFiles);  
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:130:2: warning: passing argument 1 of ‘sem_init’ from incompatible pointer type [enabled by default]
+  sem_init(&buf1->full, 0, 0);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:36:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_init (sem_t *__sem, int __pshared, unsigned int __value)
+            ^
+main.c:131:23: error: expected expression before ‘int’
+  buf1->fractresults = int** malloc (sizeof(int)*numberFiles*150);
+                       ^
+main.c:168:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->empty);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:169:2: warning: passing argument 1 of ‘sem_destroy’ from incompatible pointer type [enabled by default]
+  sem_destroy(&buf1->full);
+  ^
+In file included from main.c:7:0:
+/usr/include/semaphore.h:39:12: note: expected ‘union sem_t *’ but argument is of type ‘union sem_t **’
+ extern int sem_destroy (sem_t *__sem) __THROW;
+            ^
+main.c:125:9: warning: unused variable ‘buf2’ [-Wunused-variable]
+  buffr* buf2 = (buffr *) malloc(sizeof(struct buffr));
+         ^
+main.c: At top level:
+main.c:206:6: error: conflicting types for ‘producer’
+ void producer(buffr* bfr, char *fileName){
+      ^
+main.c:19:6: note: previous declaration of ‘producer’ was here
+ void producer(struct buffr *, char *);
+      ^
+main.c: In function ‘producer’:
+main.c:208:58: error: ‘fractal’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                          ^
+main.c:208:58: note: each undeclared identifier is reported only once for each function it appears in
+main.c:208:67: error: ‘number’ undeclared (first use in this function)
+  struct fractal** tab = (struct fractal *) malloc(sizeof(fractal)*number);
+                                                                   ^
+main.c:241:4: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+    pthread_mutex_lock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:248:4: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+    pthread_mutex_unlock(bfr->mutexpc);
+    ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+main.c:208:19: warning: unused variable ‘tab’ [-Wunused-variable]
+  struct fractal** tab = (struct fractal *) malloc(sizeof(f ractal)*number);
+                   ^
+main.c: At top level:
+main.c:259:6: error: conflicting types for ‘consumer’
+ void consumer(buffr * bfr) {
+      ^
+main.c:20:6: note: previous declaration of ‘consumer’ was here
+ void consumer(struct buffr * );
+      ^
+main.c: In function ‘consumer’:
+main.c:265:2: error: incompatible type for argument 1 of ‘pthread_mutex_lock’
+  pthread_mutex_lock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:753:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_lock (pthread_mutex_t *__mutex)
+            ^
+main.c:267:2: error: too few arguments to function ‘fractal_get_value’
+  bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+  ^
+In file included from main.c:5:0:
+libfractal/fractal.h:49:5: note: declared here
+ int fractal_get_value(const struct fractal *f, int x, int y);
+     ^
+main.c:270:2: error: incompatible type for argument 1 of ‘pthread_mutex_unlock’
+  pthread_mutex_unlock(bfr->mutexpc);
+  ^
+In file included from main.c:6:0:
+/usr/include/pthread.h:764:12: note: expected ‘union pthread_mutex_t *’ but argument is of type ‘pthread_mutex_t’
+ extern int pthread_mutex_unlock (pthread_mutex_t *__mutex)
+            ^
+make: *** [main] Error 1
+jabba:/mnt/student/2017/ruwetp/Documents/LSINF1252 - 2/projet_fractal ruwetp$ 
+
