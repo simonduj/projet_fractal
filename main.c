@@ -13,6 +13,11 @@ size_t countLines(char *fileName);
 int startWith(const char *start, const char *string);
 struct fractal *getBestFractal(struct fractal **tab);
 struct fractal **getFractal(char *fileName);
+void* consumethread(void* param);
+void* producethread(void* param);
+void producer(struct buffr * bfr, char *fileName);
+void consumer(struct buffr * bfr);
+
 
 // GLOBAL VARIABLES 
 char **fileTab;
@@ -28,7 +33,7 @@ struct fractal **tab;
 int status = 1;
 //structure to store buffers including the buffer with all the files and the buffer for the fractals 
 typedef struct {
-struct fractal** fractalbuf //stores fractals 
+struct fractal** fractalbuf; //stores fractals 
 void** filebuf; //stores files  	
 sem_t* full; //full slots 
 sem_t* empty; //empty slots
@@ -38,15 +43,26 @@ int idx;
 int idxf;
 }buffr;
 
+//function for producing thread 
+void* producethread(void* param){
+	buffr* actual_param = (buffr *) param;
+	producer(actual_param);
+	return (void*) 0;
+}
 
+void* consumethread(void* param){
+	buffr* actual_param = (buffr*) param;
+	consumer(actual_param);
+	return (void*) 0;
+}
 
 int main(int argc, char *argv[])
 {
 	
 	//declaration buffers 
 	//buf1 for 
-	buf1 = (buffr *) malloc(sizeof(buffr));
-	buf2 = (buffr *) malloc(sizeof(buffr));
+	buffr* buf1 = (buffr *) malloc(sizeof(buffr));
+	buffr* buf2 = (buffr *) malloc(sizeof(buffr));
 	//todo? initialise data of structs?
 
 	//CHECK INPUT 
@@ -106,47 +122,53 @@ int main(int argc, char *argv[])
 		index++;
 	}
 
-	for (int i = 0; i<maxThreads ;i++)
-	{
+	//for (int k = 0; i<maxThreads ;i++)
+	//{
 	
-	}
-	// Initialising threads
-	pthread_mutex_init(&mutexpc1, NULL);
-	sem_init(&empty, 0, numberFiles);  
-	sem_init(&full, 0, 0);
-	//todo
+//	}
+	// Initialising mutex of the ds & semaphores 
+	pthread_mutex_init(buf1->mutexpc, NULL);
+	sem_init(&buf1->empty, 0, numberFiles);  
+	sem_init(&buf1->full, 0, 0);
+
+	//threads creation & join
 	pthread_t producerthread;
-	
+	pthread_t consumerthread;
+
+
 	//pthread_create(thread,NULL, function, argument of function)
-	pthread_create(&producerthread, NULL, producethread, buf1);
-	if(pthread_create()){
+	if(pthread_create(&producerthread, NULL, producethread, buf1)){
 	printf("Error creating pthread \n");	
 	}
-	pthread_join();
-	if(pthread_join()){
+
+	if(pthread_join(producerthread, NULL)){
 	printf("Error joining pthread \n");	
 	}
 	
+	if(pthread_create(&consumerthread, NULL, consumethread, buf1)){
+	printf("Error creating pthread \n");	
+	}
+
+	if(pthread_join(consumerthread, NULL)){
+	printf("Error joining pthread \n");	
+	}	
+		
+     
+
+
+
+
+	//To do after the threads are OK 
 	best = getBestFractal(getFractal(fileTab[0]));
-	write_bitmap_sdl(best, outPutFile);	
+	write_bitmap_sdl(best, outPutFile);	//ok
 	//Destroys & frees 
-	sem_destroy(empty);
-	sem_destroy(full);
+	sem_destroy(&buf1->empty);
+	sem_destroy(&buf1->full);
 	pthread_exit(NULL);	
-	pthread_mutex_destroy(&mutexpc1);
+	pthread_mutex_destroy(buf1->mutexpc);
 
 }
-//function for producing thread 
-void* producethread(void* param){
-	buffer* actual_param = (buffer *) param;
-	producer(actual_param);
-	return (void*);
-}
 
-void* consumethread(void* param){
-
-	return (void*);
-}
 
 
 size_t countLines(char *fileName)
@@ -178,11 +200,11 @@ size_t countLines(char *fileName)
 
 //Each producer takes a file and writes all the fractals in the buffer 
 
-void producer(buffr * bfr, char *fileName){
+void producer(struct buffr bfr, char *fileName){
 
 
 
-	tab[i] = (struct fractal *) fractal_new(name, width, height, a, b);
+	struct fractal ** tab = (struct fractal *) malloc(sizeof(fractal));
 	size_t number =   countLines(fileName);	
 	tab = malloc(sizeof(struct fract *)*number);	
 	FILE *file;
@@ -191,7 +213,6 @@ void producer(buffr * bfr, char *fileName){
 	if(file == NULL)
 	{
 		printf("Error reading file");
-		return NULL;
 	}
 
 	int i;
@@ -202,7 +223,7 @@ void producer(buffr * bfr, char *fileName){
 	double a;
  	double b;
 
-	for(i = 0; i < number ; i++)
+	for(int k = 0; k < number ; k++)
 	{
 		fgets(line, MAX_LINE_LENGTH, file);
 		if(startWith("#", line) == 0)
@@ -218,14 +239,14 @@ void producer(buffr * bfr, char *fileName){
 		
 			b = atof(strtok(NULL, " "));
 			sem_wait(bfr->empty); //waiting for free slot
-			pthread_mutex_lock(bfr->mutexpc1);
-		//Critical section
-		//Add fractal to buffer
+			pthread_mutex_lock(bfr->mutexpc);
+			//Critical section
+			//Add fractal to buffer
 			bfr->fractalbuf[bfr->idx] = (struct fractal *) fractal_new(name, width, height, a, b);
-		//Incrementing index with modulo to be sure to reset without overflowing
+			//Incrementing index with modulo to be sure to reset without overflowing
 			bfr->idx = ((bfr->idx)+1)%maxThreads; 
-		//Unlock buffer	
-			pthread_mutex_unlock(bfr->mutexpc1);
+			//Unlock buffer	
+			pthread_mutex_unlock(bfr->mutexpc);
 			sem_post(bfr->full); //One more slot is full 
 		}
 		else
@@ -236,23 +257,25 @@ void producer(buffr * bfr, char *fileName){
 }
 
 
-void consumer(buffr * bfr) {
+void consumer(struct buffr * bfr) {
 
 	//take as input the list of fractals
 	//compute fractals
 	//return fractals
 	sem_wait(&full); //Waiting for full slot
-	pthread_mutex_lock(bfr->mutexpc1);
+	pthread_mutex_lock(bfr->mutexpc);
 	// Critical Section 
 	bfr->fractresults[bfr->idxf] = fractal_get_value(bfr->fractalbuf[bfr->idx]);
+	bfr->idxf= bfr->idxf+1;
 	bfr->idx = ((bfr->idx)+1)%maxThreads;//Incrementing buffer cursor
-	pthread_mutex_unlock(bfr->mutexpc1);
+	pthread_mutex_unlock(bfr->mutexpc);
 	sem_post(&empty);//One more free slot
 
 ;}
 
 
-
+/**
+Replaced by producer
 struct fractal **getFractal(char *fileName)
 {
 	size_t number =   Lines(fileName);
@@ -303,6 +326,7 @@ struct fractal **getFractal(char *fileName)
 
 	return tab;
 }
+*/
 
 struct fractal *getBestFractal(struct fractal **tab)
 {

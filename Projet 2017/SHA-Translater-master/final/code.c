@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
 	number2->ffs = 0;
 	pthread_mutex_init(&number2->mutex,NULL);
 
-////////////////////////////// INIT STRUCTURE POUR PTHREAD CREATE READER /////////////////////    
+////////////////////////////// INIT STRUCTURE POUR PTHREAD READER CREATE /////////////////////    
 	
     argument_rdr = (argument_readr_t *)malloc(sizeof(argument_readr_t));
 	//Passage des adresses des paramètres
